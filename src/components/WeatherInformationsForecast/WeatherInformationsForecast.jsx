@@ -1,24 +1,47 @@
-import "./WeatherInformations.css";
+import "./WeatherInformationsForecast.css";
 
-function WeatherInformations({ weather }) {
-  console.log(weather);
+function WeatherInformationsForecast({ weatherForecast }) {
+  console.log(weatherForecast);
+
+  let dailyForecast = {};
+
+  for (let forecast of weatherForecast.list) {
+    const date = new Date(forecast.dt * 1000).toLocaleDateString();
+
+    if (!dailyForecast[date]) {
+      dailyForecast[date] = forecast;
+    }
+  }
+
+  const next5DaysForecast = Object.values(dailyForecast).slice(1, 6);
+
+  function convertDate(date) {
+    const newDate = new Date(date.dt * 1000).toDateString("pt-BR", {
+      weekday: "long",
+      day: "2-digit",
+    });
+    return newDate;
+  }
+
   return (
     <div className="weather-container">
-      <h2>{weather.name}</h2>
-      <div className="weather-info">
-        <img
-          src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
-        />
-        <p className="temperature">{Math.round(weather.main.temp)} ºC</p>
-      </div>
-      <p className="description">{weather.weather[0].description}</p>
-      <div className="datails">
-        <p>Sensação Termica: {Math.round(weather.main.feels_like)} ºC</p>
-        <p>Umidade: {weather.main.humidity}%</p>
-        <p>Pressão: {weather.main.pressure} hPa</p>
-      </div>
+      <p>Previsão para os próximos 5 dias</p>
+      {next5DaysForecast.map((forecast) => (
+        <div key={forecast.dt}>
+          <p>{convertDate(forecast)}</p>
+          <img
+            src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`}
+            alt={forecast.weather[0].description}
+          />
+          <p>{forecast.weather[0].description}</p>
+          <p>
+            {Math.round(forecast.main.temp_min)}ºC Min /{" "}
+            {Math.round(forecast.main.temp_max)}ºC Max
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
 
-export default WeatherInformations;
+export default WeatherInformationsForecast;

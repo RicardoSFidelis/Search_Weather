@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import WeatherInformations from "./components/WeatherInformations/WeatherInformations";
+import WeatherInformationsForecast from "./components/WeatherInformationsForecast/WeatherInformationsForecast";
 
 function App() {
   const [weather, setWeather] = useState();
@@ -28,7 +29,7 @@ function App() {
 
         {weather && <WeatherInformations weather={weather} />}
         {weatherForecast && (
-          <weatherInformationForecast weatherForecast={weatherForecast} />
+          <WeatherInformationsForecast weatherForecast={weatherForecast} />
         )}
       </div>
     </>
